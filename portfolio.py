@@ -9,8 +9,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from . import config
-from .data import Quote, get_quote
+import config
+from data import Quote, get_quote
 
 
 @dataclass

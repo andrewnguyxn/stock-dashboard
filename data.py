@@ -20,7 +20,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from . import config
+import config
 
 
 @dataclass

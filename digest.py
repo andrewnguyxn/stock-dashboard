@@ -14,8 +14,8 @@ from __future__ import annotations
 import datetime as dt
 from dataclasses import dataclass
 
-from .portfolio import Summary
-from . import config
+from portfolio import Summary
+import config
 
 
 @dataclass
