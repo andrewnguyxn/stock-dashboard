@@ -16,11 +16,11 @@ from pathlib import Path
 import plotly.graph_objects as go
 import streamlit as st
 
-from src import config
-from src.portfolio import build_summary
-from src.digest import generate, benchmark_day_pct
-from src.data import get_candles
-from src.indicators import sma, ema, latest_rsi
+import config
+from portfolio import build_summary
+from digest import generate, benchmark_day_pct
+from data import get_candles
+from indicators import sma, ema, latest_rsi
 
 SNAPSHOT = Path("data/snapshot.json")
 
