@@ -1,0 +1,44 @@
+name: daily-pipeline
+
+# Runs every weekday at 12:30 UTC (8:30 AM ET, before the US market open),
+# plus on manual trigger. Fetches data, regenerates the snapshot + digest,
+# and commits the result back to the repo so the deployed app serves it.
+
+on:
+  schedule:
+    - cron: "30 12 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline
+        env:
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+        run: python pipeline.py
+
+      - name: Commit refreshed snapshot
+        run: |
+          git config user.name  "pipeline-bot"
+          git config user.email "pipeline-bot@users.noreply.github.com"
+          git add data/snapshot.json data/digest.md
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: refresh market snapshot [skip ci]"
+            git push
+          fi
